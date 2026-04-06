@@ -24,7 +24,8 @@ jobs:
           | Foreach-Object {$_ -replace "VERSION = ""[^""]+"";", "VERSION = ""${{ inputs.rockstar_version }}"";"}
           | Set-Content Starship/Rockstar.Engine/RockstarEnvironment.cs
       - name: dotnet publish Windows x64 binary
-        run: dotnet publish Starship/Rockstar -o rockstar-windows-x64-binary -c Release
+        working-directory: ./Starship
+        run: dotnet publish Rockstar -o ../rockstar-windows-x64-binary -c Release
       - name: Test Windows x64 binary
         run:
           rockstar-windows-x64-binary/rockstar.exe --version

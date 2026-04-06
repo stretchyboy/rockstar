@@ -24,17 +24,21 @@ jobs:
         run: dotnet workload restore
 
       - name: Restore
-        run: dotnet restore Starship
+        working-directory: ./Starship
+        run: dotnet restore
 
       - name: Build Rockstar
-        run: dotnet build Starship -c Release
+        working-directory: ./Starship
+        run: dotnet build -c Release
 
       - name: Patch VERSION constant inside Starship/Rockstar.Engine/RockstarEnvironment.cs
         run: sed -i "" 's/VERSION = "[^"]*";/VERSION = "${{ inputs.rockstar_version }}";/g' Starship/Rockstar.Engine/RockstarEnvironment.cs
       - name: dotnet publish macos x64 binary
-        run: dotnet publish Starship/Rockstar -o rockstar-macos-x64-binary -r osx-x64 -c Release
+        working-directory: ./Starship
+        run: dotnet publish Rockstar -o ../rockstar-macos-x64-binary -r osx-x64 -c Release
       - name: dotnet publish macos ARM64 binary
-        run: dotnet publish Starship/Rockstar -o rockstar-macos-arm64-binary -r osx-arm64 -c Release
+        working-directory: ./Starship
+        run: dotnet publish Rockstar -o ../rockstar-macos-arm64-binary -r osx-arm64 -c Release
       - name: Test ARM64 binary
         run:
           rockstar-macos-arm64-binary/rockstar --version
