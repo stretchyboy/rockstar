@@ -26,9 +26,9 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: restore macOS ARM64 binary from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         id: restore-cached-macos-arm64-binary
         with:
           enableCrossOsArchive: true
@@ -37,7 +37,7 @@ jobs:
           restore-keys: |
             rockstar-macos-arm64-binary-
       - name: restore macOS x64 binary from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         id: restore-cached-macos-x64-binary
         with:
           enableCrossOsArchive: true
@@ -46,7 +46,7 @@ jobs:
           restore-keys: |
             rockstar-macos-x64-binary-
       - name: restore Linux binary from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         id: restore-cached-linux-binary
         with:
           enableCrossOsArchive: true
@@ -55,7 +55,7 @@ jobs:
           restore-keys: |
             rockstar-linux-x64-binary-
       - name: restore Windows binary from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         id: restore-cached-windows-x64-binary
         with:
           enableCrossOsArchive: true
@@ -64,7 +64,7 @@ jobs:
           restore-keys: |
             rockstar-windows-x64-binary-
       - name: restore WASM binary from cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         id: restore-cached-rockstar-wasm-binary
         with:
           enableCrossOsArchive: true
@@ -85,7 +85,7 @@ jobs:
           tar -czf rockstar-${{ steps.version.outputs.version }}-macos-x64.tar.gz rockstar-macos-x64-binary/rockstar
           tar -czf rockstar-${{ steps.version.outputs.version }}-linux-x64.tar.gz rockstar-linux-x64-binary/rockstar
       - name: re-save WASM binary for downstream website workflow
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           enableCrossOsArchive: true
           path: rockstar-wasm-binary

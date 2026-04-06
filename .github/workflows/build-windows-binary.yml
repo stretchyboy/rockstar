@@ -13,9 +13,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Set up .NET 9 SDK
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.x'
       - name: update version constant
@@ -28,7 +28,7 @@ jobs:
       - name: Test Windows x64 binary
         run:
           rockstar-windows-x64-binary/rockstar.exe --version
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@v5
         name: save rockstar-windows-x64-binary to cache
         id: save-rockstar-windows-x64-binary-to-cache
         with:
