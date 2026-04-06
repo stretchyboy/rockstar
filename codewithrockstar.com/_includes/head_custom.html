@@ -3,6 +3,18 @@
 <link href="{{ '/assets/fontawesome/css/solid.min.css' | relative_url }}" rel="stylesheet" />
 <link href="{{ '/assets/fontawesome/css/all.min.css' | relative_url }}" rel="stylesheet" />
 <!-- link href="{{ '/assets/fontawesome/css/brands.css' | relative_url }}" rel="stylesheet" / -->
+<style>
+  div.site-header a.site-title,
+  header a {
+    background-image: url({{ '/assets/img/rockstar-logotype.svg' | relative_url }}) !important;
+  }
+  @media (max-width: 580px) {
+    div.site-header a.site-title,
+    header a {
+      background-image: url({{ '/assets/img/rockstar-logotype-no-tail.svg' | relative_url }}) !important;
+    }
+  }
+</style>
 <!-- Fathom - beautiful, simple website analytics -->
 <script src="https://cdn.usefathom.com/script.js" data-site="XEFKZVQW" defer></script>
 <!-- / Fathom -->
