@@ -10,8 +10,8 @@ on:
     branches: ["main"]
     paths:
       - 'codewithrockstar.com/**'
-      - 'codemirror-lang-rockstar/**'
-      - '.github/workflows/publish-codewithrockstar.com.yml'
+      - 'cm-lang-rockstar/**'
+      - '.github/workflows/build-and-deploy-website.yml'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -38,14 +38,16 @@ jobs:
           working-directory: ./codewithrockstar.com
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
       - name: fetch rockstar-wasm-binary from cache
         uses: actions/cache/restore@v4
         id: restore-cached-wasm-binary
         with:
           enableCrossOsArchive: true
           path: rockstar-wasm-binary
-          key: rockstar-wasm-binary
+          key: rockstar-wasm-binary-${{ github.run_id }}
+          restore-keys: |
+            rockstar-wasm-binary-
       - name: Copy WASM binaries into site source
         run: cp -r rockstar-wasm-binary/ codewithrockstar.com/wasm/
       - name: build CodeMirror editor bundle with Rockstar language support

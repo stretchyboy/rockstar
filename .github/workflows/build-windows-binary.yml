@@ -19,7 +19,7 @@ jobs:
       - name: update version constant
         run: |
           (Get-content Starship/Rockstar.Engine/RockstarEnvironment.cs)
-          | Foreach-Object {$_ -replace "VERSION = ""[^""]+"";", "VERSION = ""${{ github.events.inputs.rockstar_version }}"";"}
+          | Foreach-Object {$_ -replace "VERSION = ""[^""]+"";", "VERSION = ""${{ inputs.rockstar_version }}"";"}
           | Set-Content Starship/Rockstar.Engine/RockstarEnvironment.cs
       - name: dotnet publish Windows x64 binary
         run: dotnet publish Starship/Rockstar -o rockstar-windows-x64-binary -c Release
