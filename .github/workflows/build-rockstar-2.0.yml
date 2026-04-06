@@ -43,9 +43,11 @@ jobs:
         run: sed -i 's/VERSION = "[^"]*";/VERSION = "v2.0.${{ github.run_number }}";/g' Starship/Rockstar.Engine/RockstarEnvironment.cs
         # run: sed -i 's/VERSION = "[^"]*";/VERSION = "v2.0.0";/g' Starship/Rockstar.Engine/RockstarEnvironment.cs
       - name: Build Rockstar
-        run: dotnet build Starship -c Release
+        working-directory: ./Starship
+        run: dotnet build -c Release
       - name: Test Rockstar
-        run: dotnet test Starship -c Release
+        working-directory: ./Starship
+        run: dotnet test -c Release
       # - name: Update CHANGELOG
       #   id: changelog
       #   uses: requarks/changelog-action@v1
@@ -59,9 +61,11 @@ jobs:
           git commit -am "[skip actions] set VERSION = v2.0.${{ github.run_number }} in RockstarEnvironment.cs"
           git push
       - name: dotnet publish WASM engine
-        run: dotnet publish Starship/Rockstar.Wasm -o rockstar-wasm-binary -c Release
+        working-directory: ./Starship
+        run: dotnet publish Rockstar.Wasm -o ../rockstar-wasm-binary -c Release
       - name: dotnet publish Linux binary
-        run: dotnet publish Starship/Rockstar -o rockstar-linux-x64-binary -r linux-x64 -c Release
+        working-directory: ./Starship
+        run: dotnet publish Rockstar -o ../rockstar-linux-x64-binary -r linux-x64 -c Release
       - name: Test Linux x64 binary
         run: ./rockstar-linux-x64-binary/rockstar --version
       - name: upload rockstar-wasm-binary
