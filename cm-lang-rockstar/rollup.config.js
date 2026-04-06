@@ -10,6 +10,6 @@ export default [
 			{ dir: "../codewithrockstar.com/js/codemirror", format: "es" },
 			{ dir: "./test/parser", format: "es" }
 		],
-		plugins: [lezer(), nodeResolve(), typescript(), terser()]
+		plugins: [lezer(), nodeResolve(), typescript({ declaration: false }), terser()]
 	}
 ]
