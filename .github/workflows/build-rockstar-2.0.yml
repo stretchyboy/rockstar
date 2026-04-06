@@ -25,9 +25,17 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.x'
-      - name: Install .NET WASM workloads
+      - name: Set up .NET 9 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install WASM tools workload
         working-directory: ./Starship
-        run: dotnet workload restore
+        run: |
+          dotnet --info
+          dotnet workload install wasm-tools
+          dotnet workload restore
       # - name: Get Next Version
       #   id: semver
       #   uses: ietf-tools/semver-action@v1
