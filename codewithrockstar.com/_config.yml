@@ -4,6 +4,8 @@ theme: just-the-docs
 
 url: https://codewithrockstar.com
 
+search_enabled: false
+
 defaults:
   - scope:
       path: ""
