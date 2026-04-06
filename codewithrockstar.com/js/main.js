@@ -50,8 +50,7 @@ function handleMessageFromWorker(message) {
 	}
 }
 
-var worker = new Worker("/js/worker.js", { type: 'module' });
-worker.addEventListener("message", handleMessageFromWorker);
+var worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
 
 var timeouts = [];
 var outputs = [];
@@ -118,7 +117,7 @@ function stopTheRock() {
 	console.log("STOPPING THE ROCK...");
 	clearLoadingMessages();
 	worker.terminate();
-	worker = new Worker("/js/worker.js", { type: 'module' });
+	worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
 	worker.addEventListener("message", handleMessageFromWorker);
 	document.querySelectorAll("button.rock-button").forEach((button) => {
 		button.innerHTML = ROCK_BUTTON_HTML;
