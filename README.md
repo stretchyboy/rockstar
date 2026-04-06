@@ -11,6 +11,10 @@ Rockstar has three main components:
 * `/cm-lang-rockstar` contains the CodeMirror editor used on the Rockstar website
 * `/codewithrockstar.com` contains the Rockstar website, docs and examples
 
+## This fork
+
+This fork is here to allow us to use CORS to make rockstar avaiable in https://github.com/stretchyboy/rockstar-strudel
+
 ### Building Rockstar
 
 To build the Starship engine, you'll need the .NET 9 SDK
