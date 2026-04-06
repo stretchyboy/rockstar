@@ -50,6 +50,10 @@ jobs:
             rockstar-wasm-binary-
       - name: Copy WASM binaries into site source
         run: cp -r rockstar-wasm-binary/ codewithrockstar.com/wasm/
+      - name: Set up Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
       - name: build CodeMirror editor bundle with Rockstar language support
         run: |
           cd cm-lang-rockstar
