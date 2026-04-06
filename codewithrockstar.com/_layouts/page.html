@@ -9,16 +9,16 @@ layout: table_wrappers
 
 <body>
 	<header>
-		<h1><a href="/">Rockstar</a></h1>
+		<h1><a href="{{ '/' | relative_url }}">Rockstar</a></h1>
 		<h2>Tommy used to work on the docs</h2>
 	</header>
 	<nav>
-		<a href="/">Home</a>
-		<a href="/docs">Docs</a>
-		<a href="/online">Try It</a>
-		<a href="/news">News</a>
-		<a href="/merch">Merch</a>
-		<a href="/community">Community</a>
+		<a href="{{ '/' | relative_url }}">Home</a>
+		<a href="{{ '/docs' | relative_url }}">Docs</a>
+		<a href="{{ '/online' | relative_url }}">Try It</a>
+		<a href="{{ '/news' | relative_url }}">News</a>
+		<a href="{{ '/merch' | relative_url }}">Merch</a>
+		<a href="{{ '/community' | relative_url }}">Community</a>
 	</nav>
 	{{ content }}
 	<footer>
@@ -28,7 +28,7 @@ layout: table_wrappers
 			• <a href="hello@codewithrockstar.com">hello@codewithrockstar.com</a>
 		</div>
 		<div>
-			<a href="/code-of-conduct">code of conduct</a>
+			<a href="{{ '/code-of-conduct' | relative_url }}">code of conduct</a>
 			• <a href="https://github.com/RockstarLang/rockstar">code on github</a>
 			• <a href="https://app.usefathom.com/share/xefkzvqw/codewithrockstar.com">analytics by fathom</a>
 		</div>
