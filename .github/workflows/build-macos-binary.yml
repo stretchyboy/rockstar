@@ -23,14 +23,6 @@ jobs:
         working-directory: ./Starship
         run: dotnet workload restore
 
-      - name: Restore
-        working-directory: ./Starship
-        run: dotnet restore
-
-      - name: Build Rockstar
-        working-directory: ./Starship
-        run: dotnet build -c Release
-
       - name: Patch VERSION constant inside Starship/Rockstar.Engine/RockstarEnvironment.cs
         run: sed -i "" 's/VERSION = "[^"]*";/VERSION = "${{ inputs.rockstar_version }}";/g' Starship/Rockstar.Engine/RockstarEnvironment.cs
       - name: dotnet publish macos x64 binary
