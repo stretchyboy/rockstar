@@ -48,6 +48,8 @@ jobs:
           name: rockstar-wasm-binary
           path: rockstar-wasm-binary
           overwrite: true
+      - name: list downloaded artifacts
+        run: ls -lR
       - name: extract version from binary
         id: version
         run: |

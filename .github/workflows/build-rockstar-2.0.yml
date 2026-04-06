@@ -61,7 +61,9 @@ jobs:
       - name: dotnet publish WASM engine
         run: dotnet publish Starship/Rockstar.Wasm -o rockstar-wasm-binary -c Release
       - name: dotnet publish Linux binary
-        run: dotnet publish Starship/Rockstar -o rockstar-linux-x64-binary -c Release
+        run: dotnet publish Starship/Rockstar -o rockstar-linux-x64-binary -r linux-x64 -c Release
+      - name: Test Linux x64 binary
+        run: ./rockstar-linux-x64-binary/rockstar --version
       - name: upload rockstar-wasm-binary
         uses: actions/upload-artifact@v4
         with:
