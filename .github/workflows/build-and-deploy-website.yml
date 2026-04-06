@@ -23,6 +23,8 @@ permissions:
 concurrency:
   group: "pages"
   cancel-in-progress: true
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   build-main-site:
     runs-on: ubuntu-latest
@@ -45,7 +47,7 @@ jobs:
         with:
           enableCrossOsArchive: true
           path: rockstar-wasm-binary
-          key: rockstar-wasm-binary-${{ github.run_id }}
+          key: rockstar-wasm-binary-${{ github.event.workflow_run.id || github.run_id }}
           restore-keys: |
             rockstar-wasm-binary-
       - name: Copy WASM binaries into site source

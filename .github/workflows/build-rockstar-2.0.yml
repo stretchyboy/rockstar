@@ -12,6 +12,8 @@ on:
 concurrency:
   group: "build-wasm-and-linux-binaries"
   cancel-in-progress: true
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   build-engine:
     runs-on: ubuntu-latest

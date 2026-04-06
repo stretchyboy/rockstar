@@ -17,6 +17,8 @@ permissions:
 concurrency:
   group: "engine"
   cancel-in-progress: true
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 jobs:
   release-rockstar-engine:
     runs-on: ubuntu-latest
@@ -31,7 +33,7 @@ jobs:
         with:
           enableCrossOsArchive: true
           path: rockstar-macos-arm64-binary
-          key: rockstar-macos-arm64-binary-${{ github.run_id }}
+          key: rockstar-macos-arm64-binary-${{ github.event.workflow_run.id || github.run_id }}
           restore-keys: |
             rockstar-macos-arm64-binary-
       - name: restore macOS x64 binary from cache
@@ -40,7 +42,7 @@ jobs:
         with:
           enableCrossOsArchive: true
           path: rockstar-macos-x64-binary
-          key: rockstar-macos-x64-binary-${{ github.run_id }}
+          key: rockstar-macos-x64-binary-${{ github.event.workflow_run.id || github.run_id }}
           restore-keys: |
             rockstar-macos-x64-binary-
       - name: restore Linux binary from cache
@@ -49,7 +51,7 @@ jobs:
         with:
           enableCrossOsArchive: true
           path: rockstar-linux-x64-binary
-          key: rockstar-linux-x64-binary-${{ github.run_id }}
+          key: rockstar-linux-x64-binary-${{ github.event.workflow_run.id || github.run_id }}
           restore-keys: |
             rockstar-linux-x64-binary-
       - name: restore Windows binary from cache
@@ -58,7 +60,7 @@ jobs:
         with:
           enableCrossOsArchive: true
           path: rockstar-windows-x64-binary
-          key: rockstar-windows-x64-binary-${{ github.run_id }}
+          key: rockstar-windows-x64-binary-${{ github.event.workflow_run.id || github.run_id }}
           restore-keys: |
             rockstar-windows-x64-binary-
       - name: restore WASM binary from cache
@@ -67,7 +69,7 @@ jobs:
         with:
           enableCrossOsArchive: true
           path: rockstar-wasm-binary
-          key: rockstar-wasm-binary-${{ github.run_id }}
+          key: rockstar-wasm-binary-${{ github.event.workflow_run.id || github.run_id }}
           restore-keys: |
             rockstar-wasm-binary-
       - name: extract version from binary
@@ -82,6 +84,12 @@ jobs:
           tar -czf rockstar-${{ steps.version.outputs.version }}-macos-arm64.tar.gz rockstar-macos-arm64-binary/rockstar
           tar -czf rockstar-${{ steps.version.outputs.version }}-macos-x64.tar.gz rockstar-macos-x64-binary/rockstar
           tar -czf rockstar-${{ steps.version.outputs.version }}-linux-x64.tar.gz rockstar-linux-x64-binary/rockstar
+      - name: re-save WASM binary for downstream website workflow
+        uses: actions/cache/save@v4
+        with:
+          enableCrossOsArchive: true
+          path: rockstar-wasm-binary
+          key: rockstar-wasm-binary-${{ github.run_id }}
       - name: create release and upload artifacts
         uses: softprops/action-gh-release@v2
         with:
