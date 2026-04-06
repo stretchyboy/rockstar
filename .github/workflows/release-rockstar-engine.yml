@@ -50,6 +50,8 @@ jobs:
           overwrite: true
       - name: list downloaded artifacts
         run: ls -lR
+      - name: make binaries executable
+        run: chmod +x rockstar-linux-x64-binary/rockstar rockstar-macos-x64-binary/rockstar rockstar-macos-arm64-binary/rockstar
       - name: extract version from binary
         id: version
         run: |
