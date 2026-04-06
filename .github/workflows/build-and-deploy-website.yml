@@ -41,17 +41,25 @@ jobs:
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v6
-      - name: fetch rockstar-wasm-binary from cache
-        uses: actions/cache/restore@v5
-        id: restore-cached-wasm-binary
+      - name: Download WASM binary (triggered by release workflow)
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@v4
         with:
-          enableCrossOsArchive: true
+          name: rockstar-wasm-binary
           path: rockstar-wasm-binary
-          key: rockstar-wasm-binary-${{ github.event.workflow_run.id || github.run_id }}
-          restore-keys: |
-            rockstar-wasm-binary-
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download WASM binary from latest successful release workflow (push/dispatch)
+        if: github.event_name != 'workflow_run'
+        run: |
+          RUN_ID=$(gh run list --workflow release-rockstar-engine --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+          gh run download "$RUN_ID" --name rockstar-wasm-binary --dir rockstar-wasm-binary
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Copy WASM binaries into site source
-        run: cp -r rockstar-wasm-binary/ codewithrockstar.com/wasm/
+        run: |
+          mkdir -p codewithrockstar.com/wasm
+          cp -r rockstar-wasm-binary/* codewithrockstar.com/wasm/
       - name: Set up Node.js 24
         uses: actions/setup-node@v5
         with:

@@ -18,6 +18,17 @@ jobs:
         uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '9.x'
+
+      - name: Restore workloads
+        working-directory: ./Starship
+        run: dotnet workload restore
+
+      - name: Restore
+        run: dotnet restore Starship
+
+      - name: Build Rockstar
+        run: dotnet build Starship -c Release
+
       - name: Patch VERSION constant inside Starship/Rockstar.Engine/RockstarEnvironment.cs
         run: sed -i "" 's/VERSION = "[^"]*";/VERSION = "${{ inputs.rockstar_version }}";/g' Starship/Rockstar.Engine/RockstarEnvironment.cs
       - name: dotnet publish macos x64 binary
@@ -27,17 +38,13 @@ jobs:
       - name: Test ARM64 binary
         run:
           rockstar-macos-arm64-binary/rockstar --version
-      - uses: actions/cache/save@v5
-        name: Save rockstar-macos-x64-binary to cache
-        id: save-rockstar-macos-x64-binary-to-cache
+      - name: upload rockstar-macos-x64-binary
+        uses: actions/upload-artifact@v4
         with:
-          enableCrossOsArchive: true
+          name: rockstar-macos-x64-binary
           path: rockstar-macos-x64-binary
-          key: rockstar-macos-x64-binary-${{ github.run_id }}
-      - uses: actions/cache/save@v5
-        name: Save rockstar-macos-arm64-binary to cache
-        id: save-rockstar-macos-arm64-binary-to-cache
+      - name: upload rockstar-macos-arm64-binary
+        uses: actions/upload-artifact@v4
         with:
-          enableCrossOsArchive: true
+          name: rockstar-macos-arm64-binary
           path: rockstar-macos-arm64-binary
-          key: rockstar-macos-arm64-binary-${{ github.run_id }}

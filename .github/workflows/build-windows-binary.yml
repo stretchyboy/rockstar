@@ -28,10 +28,8 @@ jobs:
       - name: Test Windows x64 binary
         run:
           rockstar-windows-x64-binary/rockstar.exe --version
-      - uses: actions/cache/save@v5
-        name: save rockstar-windows-x64-binary to cache
-        id: save-rockstar-windows-x64-binary-to-cache
+      - name: upload rockstar-windows-x64-binary
+        uses: actions/upload-artifact@v4
         with:
-          enableCrossOsArchive: true
+          name: rockstar-windows-x64-binary
           path: rockstar-windows-x64-binary
-          key: rockstar-windows-x64-binary-${{ github.run_id }}

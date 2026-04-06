@@ -27,51 +27,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-      - name: restore macOS ARM64 binary from cache
-        uses: actions/cache/restore@v5
-        id: restore-cached-macos-arm64-binary
+      - name: Download binaries from triggering build workflow
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@v4
         with:
-          enableCrossOsArchive: true
-          path: rockstar-macos-arm64-binary
-          key: rockstar-macos-arm64-binary-${{ github.event.workflow_run.id || github.run_id }}
-          restore-keys: |
-            rockstar-macos-arm64-binary-
-      - name: restore macOS x64 binary from cache
-        uses: actions/cache/restore@v5
-        id: restore-cached-macos-x64-binary
-        with:
-          enableCrossOsArchive: true
-          path: rockstar-macos-x64-binary
-          key: rockstar-macos-x64-binary-${{ github.event.workflow_run.id || github.run_id }}
-          restore-keys: |
-            rockstar-macos-x64-binary-
-      - name: restore Linux binary from cache
-        uses: actions/cache/restore@v5
-        id: restore-cached-linux-binary
-        with:
-          enableCrossOsArchive: true
-          path: rockstar-linux-x64-binary
-          key: rockstar-linux-x64-binary-${{ github.event.workflow_run.id || github.run_id }}
-          restore-keys: |
-            rockstar-linux-x64-binary-
-      - name: restore Windows binary from cache
-        uses: actions/cache/restore@v5
-        id: restore-cached-windows-x64-binary
-        with:
-          enableCrossOsArchive: true
-          path: rockstar-windows-x64-binary
-          key: rockstar-windows-x64-binary-${{ github.event.workflow_run.id || github.run_id }}
-          restore-keys: |
-            rockstar-windows-x64-binary-
-      - name: restore WASM binary from cache
-        uses: actions/cache/restore@v5
-        id: restore-cached-rockstar-wasm-binary
-        with:
-          enableCrossOsArchive: true
-          path: rockstar-wasm-binary
-          key: rockstar-wasm-binary-${{ github.event.workflow_run.id || github.run_id }}
-          restore-keys: |
-            rockstar-wasm-binary-
+          pattern: rockstar-*-binary
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download binaries from latest successful build workflow (dispatch)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          RUN_ID=$(gh run list --workflow build-rockstar-2.0 --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+          gh run download "$RUN_ID" --pattern "rockstar-*-binary" --dir .
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: extract version from binary
         id: version
         run: |
@@ -84,12 +53,11 @@ jobs:
           tar -czf rockstar-${{ steps.version.outputs.version }}-macos-arm64.tar.gz rockstar-macos-arm64-binary/rockstar
           tar -czf rockstar-${{ steps.version.outputs.version }}-macos-x64.tar.gz rockstar-macos-x64-binary/rockstar
           tar -czf rockstar-${{ steps.version.outputs.version }}-linux-x64.tar.gz rockstar-linux-x64-binary/rockstar
-      - name: re-save WASM binary for downstream website workflow
-        uses: actions/cache/save@v5
+      - name: upload WASM binary for website workflow
+        uses: actions/upload-artifact@v4
         with:
-          enableCrossOsArchive: true
+          name: rockstar-wasm-binary
           path: rockstar-wasm-binary
-          key: rockstar-wasm-binary-${{ github.run_id }}
       - name: create release and upload artifacts
         uses: softprops/action-gh-release@v2
         with:
