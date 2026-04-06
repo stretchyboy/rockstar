@@ -22,6 +22,7 @@ env:
 jobs:
   release-rockstar-engine:
     runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     permissions:
       contents: write
     steps:
@@ -41,6 +42,12 @@ jobs:
           gh run download "$RUN_ID" --pattern "rockstar-*-binary" --dir .
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: upload WASM binary for website workflow
+        uses: actions/upload-artifact@v4
+        with:
+          name: rockstar-wasm-binary
+          path: rockstar-wasm-binary
+          overwrite: true
       - name: extract version from binary
         id: version
         run: |
@@ -53,11 +60,6 @@ jobs:
           tar -czf rockstar-${{ steps.version.outputs.version }}-macos-arm64.tar.gz rockstar-macos-arm64-binary/rockstar
           tar -czf rockstar-${{ steps.version.outputs.version }}-macos-x64.tar.gz rockstar-macos-x64-binary/rockstar
           tar -czf rockstar-${{ steps.version.outputs.version }}-linux-x64.tar.gz rockstar-linux-x64-binary/rockstar
-      - name: upload WASM binary for website workflow
-        uses: actions/upload-artifact@v4
-        with:
-          name: rockstar-wasm-binary
-          path: rockstar-wasm-binary
       - name: create release and upload artifacts
         uses: softprops/action-gh-release@v2
         with:
