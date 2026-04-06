@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -40,7 +40,7 @@ jobs:
           working-directory: ./codewithrockstar.com
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v6
+        uses: actions/configure-pages@v5
       - name: Download WASM binary (triggered by release workflow)
         if: github.event_name == 'workflow_run'
         uses: actions/download-artifact@v4
@@ -61,7 +61,7 @@ jobs:
           mkdir -p codewithrockstar.com/wasm
           cp -r rockstar-wasm-binary/* codewithrockstar.com/wasm/
       - name: Set up Node.js 24
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v4
         with:
           node-version: '24'
       - name: build CodeMirror editor bundle with Rockstar language support
@@ -78,7 +78,7 @@ jobs:
         env:
           JEKYLL_ENV: production
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./codewithrockstar.com/_site
   deploy:
@@ -90,4 +90,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
